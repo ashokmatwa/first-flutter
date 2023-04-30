@@ -1,8 +1,16 @@
 import 'package:first_app/utils/routes.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
  const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String name = "";
+  bool changeButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +21,9 @@ class LoginPage extends StatelessWidget {
           children: [
             Image.asset("assets/login_pic.jpg", fit: BoxFit.cover, height: 400,),
             const SizedBox(height: 30,),
-            const Text("Welcome",
-              style: TextStyle(
-                fontSize: 50,
+            Text("Welcome $name",
+              style: const TextStyle(
+                fontSize: 30,
                 color: Colors.black,
                 fontWeight: FontWeight.bold
               ),
@@ -29,6 +37,10 @@ class LoginPage extends StatelessWidget {
                     decoration: const InputDecoration(
                         hintText: "Enter Username",
                         labelText: "Username"),
+                    onChanged: (value){
+                      name = value;
+                      setState(() {});
+                    },
                   ),
                   TextFormField(
                     obscureText: true,
@@ -37,16 +49,46 @@ class LoginPage extends StatelessWidget {
                         labelText: "Password"),
                   ),
                   SizedBox(height: 25,),
-                  ElevatedButton(
-                    onPressed: (){
-                      //print("Hi Jodhpur");
+
+                  InkWell(
+                    onTap: () async{
+                      setState(() {
+                        changeButton = true;
+                      });
+                      await Future.delayed(Duration(seconds: 1));
                       Navigator.pushNamed(context, MyRoutes.homeRoute);
                     },
-                    child: Text("LOGIN", //style: TextStyle(fontSize: 20)
+                    child: AnimatedContainer(
+                      duration: const Duration(seconds: 1),
+                      // width:120,
+                     width: changeButton ? 50 : 120,
+                      height: 50,
+                      // color: Colors.green,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(changeButton ? 50 :10)
+                      ),
+                      child: changeButton ? const Icon(Icons.done,color: Colors.white,) : const Text("Login",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18
+                          ),
+                        //textAlign: TextAlign.center,
+                      ),
                     ),
-                    style: TextButton.styleFrom(minimumSize: const Size(120, 50)),
-                    //style: ButtonStyle,
                   )
+                  // ElevatedButton(
+                  //   onPressed: (){
+                  //     //print("Hi Jodhpur");
+                  //     Navigator.pushNamed(context, MyRoutes.homeRoute);
+                  //   },
+                  //   child: Text("LOGIN", //style: TextStyle(fontSize: 20)
+                  //   ),
+                  //   style: TextButton.styleFrom(minimumSize: const Size(120, 50)),
+                  //   //style: ButtonStyle,
+                  // )
                 ],
               ),
             )
